@@ -1,0 +1,37 @@
+body {
+  padding: 15px;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  width: auto;
+  height: auto;
+}
+.user-list {
+  width: 350px;
+}
+.post-list {
+  /* width: 600px; */
+  margin-left: -20px;
+}
+
+#getUser {
+  color: #fff;
+  outline: none;
+  background-color: rgba(22, 112, 247, 0.637);
+  border-radius: 25px;
+  margin: 0 0 10px 70px;
+}
+
+.list-group-item {
+  width: 350px;
+  text-align: left;
+}
+.comment-list {
+  /* margin-left: -170px; */
+}
+#message {
+  margin-left: 100px;
+  color: blue;
+}
