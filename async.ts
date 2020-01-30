@@ -1,7 +1,6 @@
 const usersData = "https://jsonplaceholder.typicode.com/users";
 const usersPost = "https://jsonplaceholder.typicode.com/posts?userId=1";
-const usersComment =
-  "https://jsonplaceholder.typicode.com/comments?postI222d=1";
+const usersComment = "https://jsonplaceholder.typicode.com/comments?postId=1";
 
 const btn = document.getElementById("getUser");
 const list = document.getElementById("list-group");
@@ -46,22 +45,33 @@ const users$ = Rx.Observable.create(function(obs: object) {
   btn.onclick = () => {
     console.log("start");
     obs.next(getUsersData());
+    // obs.error(console.log("Some error"));
+    obs.complete();
   };
 });
 
-users$.subscribe(() => {
-  getComment();
-  const posts$ = Rx.Observable.create(function(obsr: object) {
-    list.onclick = () => {
-      obsr.next(show(), console.log("post"));
-    };
-  });
-
-  posts$.subscribe(() => {
-    postList.onclick = () => {
-      showComment(comResult), console.log("comm");
-    };
-  });
+users$.subscribe({
+  next: () => {
+    getComment();
+    const posts$ = Rx.Observable.create(function(obsr: object) {
+      list.onclick = () => {
+        obsr.next(show(), console.log("post"));
+        // obsr.error(console.log("Some Error"));
+        obsr.complete();
+      };
+    });
+    posts$.subscribe({
+      next: () => {
+        postList.onclick = () => {
+          showComment(comResult), console.log("comments");
+        };
+      },
+      error: err => console.error("something wrong: " + err),
+      complete: () => console.log("done-post")
+    });
+  },
+  error: err => console.error("something wrong occurred: " + err),
+  complete: () => console.log("done-users")
 });
 
 function request(GET, url: string) {
