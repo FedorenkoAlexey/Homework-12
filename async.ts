@@ -1,6 +1,7 @@
 const usersData = "https://jsonplaceholder.typicode.com/users";
 const usersPost = "https://jsonplaceholder.typicode.com/posts?userId=1";
-const usersComment = "https://jsonplaceholder.typicode.com/comments?postId=1";
+const usersComment =
+  "https://jsonplaceholder.typicode.com/comments?postI222d=1";
 
 const btn = document.getElementById("getUser");
 const list = document.getElementById("list-group");
@@ -12,7 +13,7 @@ type response<T> = {
   data: Array<T>;
 };
 
-type user = {
+interface User {
   id: number;
   name: string;
   username: string;
@@ -21,28 +22,29 @@ type user = {
   phone: string;
   website: string;
   company: object;
-};
+}
 
-type post = {
+interface Post {
   userId: number;
   id: number;
   title: string;
   body: string;
-};
+}
 
-type comment = {
+interface Comment {
   postId: number;
   id: number;
   name: string;
   email: string;
   body: string;
-};
+}
 
-let comResult: response<comment>;
+let comResult: response<Array<Comment>>;
 let countCom: number = null;
 
 const users$ = Rx.Observable.create(function(obs: object) {
   btn.onclick = () => {
+    console.log("start");
     obs.next(getUsersData());
   };
 });
@@ -74,10 +76,10 @@ function request(GET, url: string) {
 
 async function getUsersData() {
   const resultUser = await request("GET", usersData);
-  const resUser: response<user> = JSON.parse(resultUser.target.response);
+  const resUser: response<Array<User>> = JSON.parse(resultUser.target.response);
   try {
     list.innerHTML = " ";
-    resUser.forEach((users: user) => {
+    resUser.forEach((users: User) => {
       const field = document.createElement("button");
       field.classList.add("list-group-item", "btn-post");
       field.classList.add("list-group-item-action");
@@ -98,9 +100,9 @@ function show() {
 
 async function getUsersPost() {
   const resultPost = await request("GET", usersPost);
-  const resPost: response<post> = JSON.parse(resultPost.target.response);
+  const resPost: response<Array<Post>> = JSON.parse(resultPost.target.response);
   try {
-    resPost.forEach((post: post) => {
+    resPost.forEach((post: Post) => {
       const li = document.createElement("button");
       li.classList.add("list-group-item");
       li.classList.add("d-flex");
@@ -132,7 +134,7 @@ async function getComment() {
   comResult = JSON.parse(resCom.target.response);
   try {
     let count = 0;
-    comResult.forEach((comm: comment) => {
+    comResult.forEach((comm: Comment) => {
       count += comm.postId;
     });
     countCom = count;
@@ -141,9 +143,9 @@ async function getComment() {
   }
 }
 
-function showComment(resultComment: response<comment>) {
+function showComment(resultComment: response<Array<Comment>>) {
   comments.innerHTML = " ";
-  resultComment.forEach((comm: comment) => {
+  resultComment.forEach((comm: Comment) => {
     const field = document.createElement("p");
     field.classList.add("list-group-item");
     field.classList.add("list-group-item-action");

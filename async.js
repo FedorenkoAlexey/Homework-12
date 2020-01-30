@@ -45,12 +45,15 @@ var message = document.getElementById("message");
 var comResult;
 var countCom = null;
 var users$ = Rx.Observable.create(function (obs) {
-    btn.onclick = function () {
+    (btn.onclick = function () {
+        console.log("start");
         obs.next(getUsersData());
-    };
+    }),
+        function (err) { return obs.error("OBS-50: ", err); };
 });
-users$.subscribe(function () {
+users$.subscribe(function (next) {
     getComment();
+    //  error: error => console.error("something wrong occurred: " + error);
     var posts$ = Rx.Observable.create(function (obsr) {
         list.onclick = function () {
             obsr.next(show(), console.log("post"));
@@ -61,7 +64,6 @@ users$.subscribe(function () {
             showComment(comResult), console.log("comm");
         };
     });
-    posts$.unsubscribe;
 });
 function request(GET, url) {
     return new Promise(function (succes, fals) {
