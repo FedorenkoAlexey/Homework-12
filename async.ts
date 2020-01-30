@@ -45,7 +45,7 @@ const users$ = Rx.Observable.create(function(obs: object) {
   btn.onclick = () => {
     console.log("start");
     obs.next(getUsersData());
-    // obs.error(console.log("Some error"));
+    obs.error("Some error Users");
     obs.complete();
   };
 });
@@ -56,7 +56,7 @@ users$.subscribe({
     const posts$ = Rx.Observable.create(function(obsr: object) {
       list.onclick = () => {
         obsr.next(show(), console.log("post"));
-        // obsr.error(console.log("Some Error"));
+        obsr.error("Some Error Post");
         obsr.complete();
       };
     });
@@ -66,11 +66,11 @@ users$.subscribe({
           showComment(comResult), console.log("comments");
         };
       },
-      error: err => console.error("something wrong: " + err),
+      error: (err: string) => console.error(`something wrong: ${err}`),
       complete: () => console.log("done-post")
     });
   },
-  error: err => console.error("something wrong occurred: " + err),
+  error: (err: string) => console.error(`something wrong occurred: ${err}`),
   complete: () => console.log("done-users")
 });
 
